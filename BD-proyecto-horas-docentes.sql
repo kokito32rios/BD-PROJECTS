@@ -162,3 +162,27 @@ CREATE TABLE roles
                             ('Curso Básico', 25000.00),
                             ('Curso Avanzado', 35000.00),
                             ('Curso Especializado', 45000.00);
+
+                            -- Tabla de bancos
+CREATE TABLE bancos (
+    id_banco INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    activo TINYINT(1) DEFAULT 1,
+    creado_el DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabla de tipos de cuenta
+CREATE TABLE tipos_cuenta (
+    id_tipo_cuenta INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL UNIQUE,  -- 'Ahorros', 'Corriente'
+    activo TINYINT(1) DEFAULT 1,
+    creado_el DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Modificar tabla usuarios
+ALTER TABLE usuarios
+ADD COLUMN id_banco INT NULL,
+ADD COLUMN id_tipo_cuenta INT NULL,
+ADD COLUMN numero_cuenta VARCHAR(20) NULL,
+ADD FOREIGN KEY (id_banco) REFERENCES bancos(id_banco),
+ADD FOREIGN KEY (id_tipo_cuenta) REFERENCES tipos_cuenta(id_tipo_cuenta);
