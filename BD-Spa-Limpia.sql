@@ -307,7 +307,28 @@ INTO servicios
 
 USE spa_unas;
 
+ALTER TABLE citas ADD COLUMN nombre_cliente VARCHAR
+(255) NULL AFTER email_cliente;
+
+USE spa_unas;
+
 ALTER TABLE citas MODIFY email_cliente VARCHAR
 (100) NULL;
 ALTER TABLE citas MODIFY telefono_contacto VARCHAR
 (20) NULL;
+
+-- =========================================================
+-- MODIFICACIÓN SIMPLE: Habilitar Pagos Múltiples por Cita
+-- Ejecutar en: spa_unas
+-- =========================================================
+
+-- 1. Renombrar monto_total a monto (porque ahora representa un pago parcial)
+ALTER TABLE pagos CHANGE COLUMN monto_total monto DECIMAL
+(10,2) NOT NULL;
+
+-- 2. Agregar índice para búsquedas por cita (mejora rendimiento)
+ALTER TABLE pagos ADD INDEX idx_id_cita (id_cita);
+
+-- 3. (Opcional) Agregar notas para identificar cada pago
+ALTER TABLE pagos ADD COLUMN notas VARCHAR
+(150) DEFAULT NULL AFTER metodo_pago_cliente;
